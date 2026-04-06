@@ -228,20 +228,42 @@ input[type="time"]:focus{outline:none;border-color:var(--p2)}
 <div style="display:flex;gap:.28rem"><input type="text" id="stI" placeholder="Student name…" style="flex:1">
 <button class="btn bp" style="width:auto;margin:0;padding:.48rem .7rem" id="asB">+ Add</button></div>
 <div id="stL" style="margin-top:.38rem"></div></div>
+
 <div class="cd"><h3>✅ Mark Attendance</h3>
 <div style="display:flex;gap:.28rem;align-items:center;margin-bottom:.42rem">
 <label style="font-size:.74rem;font-weight:600;color:var(--t2)">Date:</label>
-<input type="date" id="aD" style="flex:1"></div>
+<input type="date" id="aD" style="flex:1">
+<div id="dayLabel" style="font-size:.74rem;font-weight:600;color:var(--t2);white-space:nowrap"></div>
+</div>
+
+<!-- Holiday Toggle for Current Date -->
+<div id="dayHolidayBox" style="display:flex;align-items:center;gap:.5rem;padding:.5rem;background:#fff3e0;border-radius:8px;margin-bottom:.5rem;border:1.5px solid #ffb74d" class="hi">
+<span style="font-size:.82rem;flex:1">🏖️ Mark as Holiday (No class today)</span>
+<label class="tb" style="margin:0;background:rgba(255,152,0,.2)">
+<div class="tg"><input type="checkbox" id="dayHolToggle"><span></span></div>
+</label>
+</div>
+
+<!-- Sunday Warning -->
+<div id="sundayWarn" style="display:none;padding:.55rem;background:#ffebee;border-radius:8px;margin-bottom:.5rem;border:1.5px solid #ef5350;text-align:center">
+<div style="font-size:.84rem;font-weight:700;color:#c62828;margin-bottom:.2rem">🗓️ Sunday - Usually Holiday</div>
+<div style="font-size:.72rem;color:var(--t2)">Toggle "Mark as Holiday" above if class was cancelled. Otherwise, mark attendance normally.</div>
+</div>
+
 <div id="aL"></div>
 <div id="aE" class="em hi">Add students first.</div>
+
+<div id="attActionsBox">
 <div class="g2" style="margin-top:.45rem">
 <button class="btn bs bsm" id="allP">✅ All Present</button>
-<button class="btn bd bsm" id="allA">❌ All Absent</button></div></div>
+<button class="btn bd bsm" id="allA">❌ All Absent</button></div>
+</div>
+</div>
+
 <div class="cd"><div class="cl" data-c="asB2"><h3>📊 Monthly Summary</h3><span class="aw">▼</span></div>
 <div class="cb" id="asB2"><div class="mp"><select id="aM"></select><select id="aY"></select>
 <button class="btn bs bsm" id="aR">Show</button></div><div class="as" id="aT"></div></div></div>
 </section>
-
 <!-- ═══ TAB: FEES ═══ -->
 <section id="T3" class="tab">
 <div class="cd"><h3>💰 Record Payment</h3>
