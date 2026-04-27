@@ -144,6 +144,8 @@ input[type="time"]:focus{outline:none;border-color:var(--p2)}
 .stat-item{text-align:center;padding:.6rem;background:#f5f5f5;border-radius:8px}
 .stat-val{font-size:1.3rem;font-weight:800;color:var(--p)}
 .stat-lbl{font-size:.7rem;color:var(--t2);margin-top:.15rem}
+.prog-bar{background:#e0e0e0;height:8px;border-radius:8px;overflow:hidden;margin-top:.3rem}
+.prog-fill{background:var(--p);height:100%;transition:width .3s}
 .mark-item{padding:.5rem;background:#f9f9f9;border-radius:8px;border:1px solid var(--b);margin-top:.3rem}
 .mark-head{display:flex;justify-content:space-between;align-items:center}
 .mark-subj{font-weight:700;font-size:.82rem}
@@ -152,6 +154,10 @@ input[type="time"]:focus{outline:none;border-color:var(--p2)}
 .mark-score.avg{color:#ff9800}
 .mark-score.poor{color:#f44336}
 .mark-det{font-size:.7rem;color:var(--t2);margin-top:.15rem}
+.syl-item{padding:.6rem;background:#f9f9f9;border-radius:8px;border:1px solid var(--b);margin-top:.4rem}
+.syl-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:.3rem}
+.syl-subj{font-weight:700;font-size:.88rem}
+.syl-pct{font-size:.82rem;font-weight:700;color:var(--p)}
 @media(max-width:360px){.ch{padding:.24rem .48rem;font-size:.72rem}header h1{font-size:.98rem}.bp{font-size:.88rem}.at{width:32px;height:27px;font-size:.66rem}.bn button{font-size:.52rem}}
 </style>
 </head>
@@ -191,8 +197,8 @@ input[type="time"]:focus{outline:none;border-color:var(--p2)}
 <div class="chips" id="sC"></div>
 <input type="text" id="sI" placeholder="Custom subject…">
 </div>
-<div class="cd"><h3>📝 Tuition Par Kya Hua</h3>
-<textarea id="tI" rows="3" placeholder="Aaj tuition mein kya padhaya…"></textarea>
+<div class="cd"><h3>📝 Topics</h3>
+<textarea id="tI" rows="3" placeholder="Topics taught today…"></textarea>
 </div>
 <div class="cd"><h3>⏰ Timing</h3>
 <div class="tr"><div><label>Start</label><input type="time" id="t1"></div>
@@ -263,79 +269,44 @@ input[type="time"]:focus{outline:none;border-color:var(--p2)}
 <button class="btn bs bsm" id="aR">Show</button></div><div class="as" id="aT"></div></div></div>
 </section>
 
-<!-- TAB 3: TEST MARKS -->
+<!-- TAB 3: STUDENT REPORTS -->
 <section id="T3" class="tab">
-<div class="cd"><h3>📝 Add Test Marks</h3>
-<div class="ff">
-<div><label class="op" style="font-weight:600;font-style:normal">Student</label>
-<select id="tmStu"><option value="">Select student…</option></select></div>
-<div style="display:flex;gap:.3rem">
-<div style="flex:1"><label class="op" style="font-weight:600;font-style:normal">Subject</label>
-<select id="tmSubj"><option value="">Select…</option></select></div>
-<div style="flex:1"><label class="op" style="font-weight:600;font-style:normal">Date</label>
-<input type="date" id="tmDate"></div></div>
-<div><label class="op" style="font-weight:600;font-style:normal">Test Name</label>
-<input type="text" id="tmName" placeholder="Unit Test 1, Weekly Test…"></div>
-<div style="display:flex;gap:.3rem">
-<div style="flex:1"><label class="op" style="font-weight:600;font-style:normal">Max Marks</label>
-<input type="number" id="tmMax" placeholder="50"></div>
-<div style="flex:1"><label class="op" style="font-weight:600;font-style:normal">Scored</label>
-<input type="number" id="tmScore" placeholder="45"></div></div>
-<button class="btn bp" id="atmB" style="margin:0">📝 Save Marks</button>
-</div></div>
-
-<div class="cd"><div class="cl" data-c="tmListColl"><h3>📊 Test Records</h3><span class="aw">▼</span></div>
-<div class="cb" id="tmListColl"><div id="testMarksList"></div></div></div>
-</section>
-
-<!-- TAB 4: STUDENT REPORTS -->
-<section id="T4" class="tab">
 <div class="cd"><h3>👤 Select Student</h3>
 <select id="repStu" style="width:100%"><option value="">Choose student…</option></select>
 </div>
 
 <div id="reportContent" class="hi">
 
-<div class="cd"><h3>📊 Quick Stats</h3>
+<div class="cd"><h3>📊 Overall Performance</h3>
 <div class="stat-box">
 <div class="stat-item"><div class="stat-val" id="repAttPct">0%</div><div class="stat-lbl">Attendance</div></div>
-<div class="stat-item"><div class="stat-val" id="repTests">0</div><div class="stat-lbl">Tests Taken</div></div>
-<div class="stat-item"><div class="stat-val" id="repAvgMarks">0%</div><div class="stat-lbl">Avg Marks</div></div>
 <div class="stat-item"><div class="stat-val" id="repClasses">0</div><div class="stat-lbl">Classes</div></div>
 </div></div>
 
-<div class="cd"><h3>📄 Generate Report</h3>
-<div class="g2" style="margin-bottom:.5rem">
-<button class="btn bs" id="repWeekBtn">📅 Weekly Report</button>
-<button class="btn bs" id="repMonthBtn">📆 Monthly Report</button>
+<div class="cd"><h3>📅 Select Period</h3>
+<div class="mp">
+<select id="repType">
+<option value="week">Weekly Report</option>
+<option value="month">Monthly Report</option>
+</select>
 </div>
-
-<div id="weekPicker" class="hi">
-<p style="font-size:.75rem;color:var(--t2);margin-bottom:.4rem">Select Week:</p>
-<div class="g3">
+<div id="weekPicker" class="g3">
 <button class="btn bs bsm" id="repWeekPrev">← Prev</button>
 <button class="btn bs bsm" id="repWeekCur">This Week</button>
 <button class="btn bs bsm" id="repWeekNext">Next →</button>
 </div>
-<p style="font-size:.7rem;color:var(--t2);margin-top:.3rem;text-align:center" id="weekRangeDisp"></p>
-<button class="btn bp" id="repWeekGen" style="margin-top:.5rem">📄 Generate PDF</button>
-</div>
-
-<div id="monthPicker" class="hi">
-<p style="font-size:.75rem;color:var(--t2);margin-bottom:.4rem">Select Month:</p>
-<div class="mp">
+<div id="monthPicker" class="mp hi">
 <select id="repMonth"></select>
 <select id="repYear"></select>
 </div>
-<button class="btn bp" id="repMonthGen">📄 Generate PDF</button>
-</div>
+<button class="btn bp" id="repGenBtn">📄 Generate Report PDF</button>
 </div>
 
 </div>
 </section>
 
-<!-- TAB 5: FEES -->
-<section id="T5" class="tab">
+<!-- TAB 4: FEES -->
+<section id="T4" class="tab">
 <div class="cd"><h3>💰 Payment</h3>
 <div class="ff">
 <div><label class="op" style="font-weight:600;font-style:normal">Student</label>
@@ -360,8 +331,8 @@ input[type="time"]:focus{outline:none;border-color:var(--p2)}
 <div id="fL"></div></div>
 </section>
 
-<!-- TAB 6: CLASS REPORTS -->
-<section id="T6" class="tab">
+<!-- TAB 5: REPORTS -->
+<section id="T5" class="tab">
 <div class="cd"><h3>📄 Class Reports (PDF)</h3>
 <p style="font-size:.74rem;color:var(--t2);margin-bottom:.42rem">Generate → Print → Save as PDF</p>
 <div class="rc" data-r="week"><h4>📅 Weekly</h4><p>This week's classes</p></div>
@@ -374,8 +345,8 @@ input[type="time"]:focus{outline:none;border-color:var(--p2)}
 <button class="btn bs" id="rC" style="width:100%;margin-top:.18rem">Cancel</button></div>
 </section>
 
-<!-- TAB 7: SYNC -->
-<section id="T7" class="tab">
+<!-- TAB 6: SYNC -->
+<section id="T6" class="tab">
 <div class="cd"><h3>☁️ Cloud Status</h3>
 <div id="syncStat" style="font-size:.78rem;color:var(--t2)"></div>
 <div class="g2" style="margin-top:.5rem">
@@ -391,11 +362,10 @@ input[type="time"]:focus{outline:none;border-color:var(--p2)}
 <nav class="bn">
 <button class="on" data-t="T1"><span class="ic">📝</span>Class</button>
 <button data-t="T2"><span class="ic">✅</span>Attend</button>
-<button data-t="T3"><span class="ic">📊</span>Tests</button>
-<button data-t="T4"><span class="ic">👤</span>Report</button>
-<button data-t="T5"><span class="ic">💰</span>Fees</button>
-<button data-t="T6"><span class="ic">📄</span>Docs</button>
-<button data-t="T7"><span class="ic">☁️</span>Sync</button>
+<button data-t="T3"><span class="ic">👤</span>Report</button>
+<button data-t="T4"><span class="ic">💰</span>Fees</button>
+<button data-t="T5"><span class="ic">📄</span>Docs</button>
+<button data-t="T6"><span class="ic">☁️</span>Sync</button>
 </nav>
 
 <div class="toast" id="toastEl"></div>
@@ -404,6 +374,9 @@ input[type="time"]:focus{outline:none;border-color:var(--p2)}
 (function(){
 'use strict';
 
+// ═══════════════════════════════════════════════════════
+// YOUR GOOGLE SHEET URL (HARDCODED)
+// ═══════════════════════════════════════════════════════
 var SHEET_URL='https://script.google.com/macros/s/AKfycbxZKXNQyn4ubMEIDrzuWhnO4rB-FL1DUntypkw-k6jJ8r7-i7qYm5zUQVRI7aWTNYKKtA/exec';
 
 var DEF_SUBJ=['Math','Science','English','Hindi','Social Science','Sanskrit'];
@@ -412,24 +385,27 @@ var DY=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 
 var S={subjects:[].concat(DEF_SUBJ),selSubjects:[],templates:[],history:[],
   lastTimes:{start:'16:00',end:'17:00'},students:[],attendance:{},holidays:{},
-  testMarks:[],fees:[]};
+  testMarks:[],homeworkCompletion:[],syllabusProgress:[],fees:[]};
 
 var isLoaded=false,isSaving=false,saveQueue=false,saveCount=0;
-var currentWeekOffset=0,selectedStudentId='';
+var currentWeekOffset=0;
 
 function $(id){return document.getElementById(id)}
 function esc(t){var d=document.createElement('div');d.textContent=t;return d.innerHTML}
 
+// ═══ CLOUD LOAD ═══
 function loadFromCloud(cb){
-  $('loadMsg').textContent='Loading…';$('retryBox').classList.add('hi');$('dataInfo').textContent='';
+  $('loadMsg').textContent='Loading from cloud…';
+  $('retryBox').classList.add('hi');$('dataInfo').textContent='';
   var cbName='_cb'+Date.now()+Math.random().toString(36).substr(2,5);
   var timer=setTimeout(function(){cleanup();$('loadMsg').textContent='';
-    $('errMsg').textContent='⏰ Timeout';$('retryBox').classList.remove('hi');cb(false);},25000);
+    $('errMsg').textContent='⏰ Timeout. Check internet.';
+    $('retryBox').classList.remove('hi');cb(false);},25000);
   var scr;
   function cleanup(){clearTimeout(timer);delete window[cbName];if(scr&&scr.parentNode)scr.remove();}
   window[cbName]=function(data){cleanup();
     if(data&&data.status==='ok'){applyCloudData(data);
-      $('dataInfo').textContent='✅ '+S.students.length+' students';cb(true);}
+      $('dataInfo').textContent='✅ '+S.students.length+' students loaded';cb(true);}
     else{$('loadMsg').textContent='';$('errMsg').textContent='❌ '+(data&&data.message?data.message:'Error');
       $('retryBox').classList.remove('hi');cb(false);}};
   scr=document.createElement('script');scr.src=SHEET_URL+'?callback='+cbName+'&t='+Date.now();
@@ -452,11 +428,9 @@ function applyCloudData(d){
         Object.keys(d.attendance[date]).forEach(function(sid){
           S.attendance[date][String(sid)]=d.attendance[date][sid];});}});}
   if(d.holidays)S.holidays=d.holidays;
-  if(d.testMarks)S.testMarks=d.testMarks.map(function(t){
-    return{id:String(t.id||''),studentId:String(t.studentId||''),
-      studentName:t.studentName||'',subject:t.subject||'',testName:t.testName||'',
-      maxMarks:Number(t.maxMarks)||0,scored:Number(t.scored)||0,date:t.date||''};
-  });
+  if(d.testMarks)S.testMarks=d.testMarks;
+  if(d.homeworkCompletion)S.homeworkCompletion=d.homeworkCompletion;
+  if(d.syllabusProgress)S.syllabusProgress=d.syllabusProgress;
   if(d.history)S.history=d.history.map(function(h){
     return{id:String(h.id||''),ts:h.ts||Date.now(),date:h.date||'',
       subject:h.subject||'',topics:h.topics||'',startTime:h.startTime||'',
@@ -467,6 +441,7 @@ function applyCloudData(d){
       date:f.date||'',forMonth:f.forMonth||'',note:f.note||'',screenshot:''};});
 }
 
+// ═══ CLOUD SAVE ═══
 var saveTimer=null;
 function cloudSave(){if(!isLoaded)return;clearTimeout(saveTimer);
   showSaveStatus('saving');saveTimer=setTimeout(doCloudSave,1500);}
@@ -481,6 +456,8 @@ function doCloudSave(){if(!isLoaded){showSaveStatus('idle');return;}
         att[date][String(sid)]=S.attendance[date][sid];});});return att;})(),
     holidays:S.holidays,
     testMarks:S.testMarks,
+    homeworkCompletion:S.homeworkCompletion,
+    syllabusProgress:S.syllabusProgress,
     history:S.history.map(function(h){return{id:String(h.id),ts:h.ts,date:h.date||'',
       subject:h.subject||'',topics:h.topics||'',startTime:h.startTime||'',
       endTime:h.endTime||'',homework:h.homework||'',message:h.message||'',
@@ -499,6 +476,7 @@ function showSaveStatus(s){$('saveBar').className='save-bar '+s;
   if(s==='saved')setTimeout(function(){$('saveBar').className='save-bar idle'},2500);
   if(s==='error')setTimeout(function(){$('saveBar').className='save-bar idle'},5000);}
 
+// ═══ HELPERS ═══
 function fmtDate(d){return MO[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear()+' ('+DY[d.getDay()]+')';}
 function fmtDS(d){return(d.getMonth()+1)+'/'+d.getDate()+'/'+d.getFullYear();}
 function fmtT(t){if(!t)return'';var p=t.split(':'),h=+p[0],m=p[1];return(h%12||12)+':'+m+(h>=12?' PM':' AM');}
@@ -525,14 +503,14 @@ function showModal(title,prompt,cb,ph){var bg=document.createElement('div');bg.c
   inp.onkeydown=function(e){if(e.key==='Enter'){cb(inp.value);close();}};
   bg.onclick=function(e){if(e.target===bg)close();};}
 
+// ═══ TAB NAV ═══
 function switchTab(id){document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on')});
   $(id).classList.add('on');
   document.querySelectorAll('.bn button').forEach(function(b){b.classList.toggle('on',b.dataset.t===id)});
   if(id==='T2'){rAtt();rAttSum();}
-  if(id==='T3'){updateTmStu();renderTestMarks();}
-  if(id==='T4'){updateRepStu();}
-  if(id==='T5'){uDL();rFees();pFF();}
-  if(id==='T7'){rSync();}}
+  if(id==='T3'){updateRepStu();renderStudentReport();}
+  if(id==='T4'){uDL();rFees();pFF();}
+  if(id==='T6'){rSync();}}
 document.querySelectorAll('.bn button').forEach(function(b){
   b.addEventListener('click',function(){switchTab(b.dataset.t)})});
 
@@ -540,6 +518,7 @@ document.querySelectorAll('.cl').forEach(function(h){h.addEventListener('click',
   var body=$(h.dataset.c);var arw=h.querySelector('.aw');
   body.classList.toggle('open');if(arw)arw.classList.toggle('open');})});
 
+// ═══ SUBJECTS ═══
 function getSubjects(){var sel=S.selSubjects.slice();var custom=$('sI').value.trim();
   if(custom)custom.split(/[,،]\s*/).forEach(function(s){s=s.trim();if(s&&sel.indexOf(s)<0)sel.push(s)});
   return sel;}
@@ -561,13 +540,14 @@ function rSubj(){var c=$('sC');c.innerHTML='';
   },'Subject')};c.appendChild(a);}
 $('sI').addEventListener('input',function(){if(this.value.trim()){S.selSubjects=[];rSubj();}});
 
+// ═══ MESSAGES ═══
 $('genB').addEventListener('click',function(){var raw=$('tI').value.trim();
   if(!raw){toast('⚠️ Enter topics!');$('tI').focus();return;}
   var subj=getSubjStr(),topics=bullets(raw),hw=bullets($('hI').value.trim());
   var st=$('t1').value,et=$('t2').value,today=new Date();var arr=getSubjects();
   var m='📚 *Today\'s Class Update*\n📅 Date: '+fmtDate(today)+'\n';
   if(subj)m+='📖 '+(arr.length>1?'Subjects':'Subject')+': '+subj+'\n';
-  m+='\n✅ *Tuition Par Kya Hua:*\n';topics.forEach(function(t){m+='• '+t+'\n'});
+  m+='\n✅ *Topics Covered:*\n';topics.forEach(function(t){m+='• '+t+'\n'});
   if(st&&et)m+='\n⏰ *Timing:* '+fmtT(st)+' - '+fmtT(et)+'\n';
   if(hw.length){m+='\n📝 *Homework:*\n';hw.forEach(function(h){m+='• '+h+'\n'});}
   m+='\nThank you 🙏';S.lastTimes={start:st,end:et};
@@ -599,6 +579,7 @@ $('holTog').addEventListener('change',function(){var on=this.checked;
   $('mF').classList.toggle('hi',on);$('hF').classList.toggle('hi',!on);$('pS').classList.add('hi');
   if(on){var t=new Date();t.setDate(t.getDate()+1);$('nD').value=t.toISOString().split('T')[0];}});
 
+// ═══ TEMPLATES ═══
 $('stB').addEventListener('click',function(){var subj=getSubjStr(),topics=$('tI').value.trim(),
   hw=$('hI').value.trim();if(!topics&&!subj){toast('⚠️ Fill fields!');return;}
   showModal('Save Template','Name:',function(name){if(name&&name.trim()){
@@ -626,6 +607,7 @@ APP.dT=function(id){if(!confirm('Delete?'))return;
   S.templates=S.templates.filter(function(x){return String(x.id)!==String(id)});
   cloudSave();rTpl();toast('🗑️ Deleted');};
 
+// ═══ HISTORY ═══
 function addHist(msg,subject,topics,homework,st,et){
   S.history.unshift({id:String(Date.now()),ts:Date.now(),subject:subject||'',message:msg,
     topics:topics||'',homework:homework||'',startTime:st||'',endTime:et||'',
@@ -645,12 +627,13 @@ APP.cH=function(id){var h=S.history.find(function(x){return String(x.id)===Strin
 APP.sH=function(id){var h=S.history.find(function(x){return String(x.id)===String(id)});
   if(h)window.open('https://wa.me/?text='+encodeURIComponent(h.message),'_blank');};
 
+// ═══ ATTENDANCE ═══
 $('asB').addEventListener('click',function(){var n=$('stI').value.trim();
   if(!n){toast('⚠️ Enter name!');$('stI').focus();return;}
   if(S.students.find(function(s){return s.name.toLowerCase()===n.toLowerCase()})){
     toast('⚠️ Exists!');return;}
   var newId=String(Date.now());S.students.push({id:newId,name:n});$('stI').value='';
-  cloudSave();rStu();rAtt();updateTmStu();updateRepStu();toast('✅ Added: '+n);});
+  cloudSave();rStu();rAtt();updateRepStu();toast('✅ Added: '+n);});
 $('stI').addEventListener('keydown',function(e){if(e.key==='Enter')$('asB').click()});
 
 function rStu(){if(!S.students.length){$('stL').innerHTML='<div class="em">No students.</div>';return;}
@@ -660,7 +643,7 @@ function rStu(){if(!S.students.length){$('stL').innerHTML='<div class="em">No st
   }).join('');}
 APP.dS=function(id){if(!confirm('Remove?'))return;
   S.students=S.students.filter(function(x){return String(x.id)!==String(id)});
-  cloudSave();rStu();rAtt();updateTmStu();updateRepStu();toast('🗑️ Removed');};
+  cloudSave();rStu();rAtt();updateRepStu();toast('🗑️ Removed');};
 
 function rAtt(){var dt=$('aD').value;if(!dt){dt=todayISO();$('aD').value=dt;}
   var d=new Date(dt+'T00:00:00');var dayName=DY[d.getDay()];var isSunday=(d.getDay()===0);
@@ -687,8 +670,10 @@ $('aD').addEventListener('change',rAtt);
 
 $('dayHolToggle').addEventListener('change',function(){var dt=$('aD').value;
   var isHoliday=this.checked;if(!S.holidays)S.holidays={};
-  if(isHoliday){S.holidays[dt]=true;if(S.attendance[dt])delete S.attendance[dt];toast('🏖️ Holiday');}
-  else{delete S.holidays[dt];toast('✅ Removed');}cloudSave();rAtt();});
+  if(isHoliday){S.holidays[dt]=true;if(S.attendance[dt])delete S.attendance[dt];
+    toast('🏖️ Holiday');}
+  else{delete S.holidays[dt];toast('✅ Removed');}
+  cloudSave();rAtt();});
 
 APP.mA=function(sid,status){var dt=$('aD').value;sid=String(sid);
   if(!S.attendance[dt])S.attendance[dt]={};
@@ -732,57 +717,29 @@ function rAttSum(){var m=+$('aM').value,y=+$('aY').value,days=dIM(m,y);
     h+='<td class="pc2">'+pc+'</td><td class="ac2">'+ac+'</td><td class="hc2">'+hc+'</td><td>'+pct+'%</td></tr>';});
   $('aT').innerHTML=h+'</table>';}
 
-// TEST MARKS
-function updateTmStu(){
-  var sel=$('tmStu');sel.innerHTML='<option value="">Select student…</option>';
-  S.students.forEach(function(s){
-    var o=document.createElement('option');o.value=s.id;o.textContent=s.name;sel.appendChild(o);});
-  var selS=$('tmSubj');selS.innerHTML='<option value="">Select…</option>';
-  S.subjects.forEach(function(s){
-    var o=document.createElement('option');o.value=s;o.textContent=s;selS.appendChild(o);});
-}
-$('atmB').addEventListener('click',function(){
-  var sid=$('tmStu').value,subj=$('tmSubj').value,name=$('tmName').value.trim();
-  var max=parseInt($('tmMax').value),score=parseInt($('tmScore').value),dt=$('tmDate').value;
-  if(!sid){toast('⚠️ Select student!');$('tmStu').focus();return;}
-  if(!subj){toast('⚠️ Select subject!');$('tmSubj').focus();return;}
-  if(!name){toast('⚠️ Enter test name!');$('tmName').focus();return;}
-  if(!max||max<=0){toast('⚠️ Enter max marks!');$('tmMax').focus();return;}
-  if(score===undefined||score<0||score>max){toast('⚠️ Enter valid scored marks!');$('tmScore').focus();return;}
-  if(!dt){toast('⚠️ Select date!');$('tmDate').focus();return;}
-  var stu=S.students.find(function(s){return s.id===sid});
-  if(!stu)return;
-  S.testMarks.push({id:String(Date.now()),studentId:sid,studentName:stu.name,
-    subject:subj,testName:name,maxMarks:max,scored:score,date:dt});
-  $('tmName').value='';$('tmMax').value='';$('tmScore').value='';
-  cloudSave();renderTestMarks();toast('✅ Test saved!');
-});
-function renderTestMarks(){
-  if(!S.testMarks.length){$('testMarksList').innerHTML='<div class="em">No tests recorded.</div>';return;}
-  var sorted=S.testMarks.slice().sort(function(a,b){return(b.date||'').localeCompare(a.date||'')});
-  $('testMarksList').innerHTML=sorted.map(function(t){
-    var pct=t.maxMarks?Math.round(t.scored/t.maxMarks*100):0;
-    var cls=pct>=75?'good':pct>=50?'avg':'poor';
-    return'<div class="mark-item"><div class="mark-head">'+
-      '<span class="mark-subj">'+esc(t.studentName)+' - '+esc(t.subject)+'</span>'+
-      '<span class="mark-score '+cls+'">'+t.scored+'/'+t.maxMarks+'</span></div>'+
-      '<div class="mark-det">'+esc(t.testName)+' • '+new Date(t.date+'T00:00:00').toLocaleDateString()+' • '+pct+'%</div>'+
-      '<div style="text-align:right;margin-top:.3rem">'+
-      '<button class="btn bsm bd" onclick="APP.delTest(\''+t.id+'\')">🗑️ Delete</button></div></div>';
-  }).join('');
-}
-APP.delTest=function(id){
-  if(!confirm('Delete test record?'))return;
-  S.testMarks=S.testMarks.filter(function(x){return x.id!==id});
-  cloudSave();renderTestMarks();toast('🗑️ Deleted');
-};
-
-// STUDENT REPORTS
+// ═══ STUDENT REPORTS ═══
 function updateRepStu(){
   var sel=$('repStu');sel.innerHTML='<option value="">Choose student…</option>';
   S.students.forEach(function(s){
-    var o=document.createElement('option');o.value=s.id;o.textContent=s.name;sel.appendChild(o);});
+    var o=document.createElement('option');o.value=s.id;o.textContent=s.name;sel.appendChild(o);
+  });
 }
+
+$('repStu').addEventListener('change',function(){
+  if(this.value){$('reportContent').classList.remove('hi');renderStudentReport();}
+  else{$('reportContent').classList.add('hi');}
+});
+
+$('repType').addEventListener('change',function(){
+  var isWeek=this.value==='week';
+  $('weekPicker').classList.toggle('hi',!isWeek);
+  $('monthPicker').classList.toggle('hi',isWeek);
+});
+
+$('repWeekPrev').addEventListener('click',function(){currentWeekOffset--;renderStudentReport();});
+$('repWeekCur').addEventListener('click',function(){currentWeekOffset=0;renderStudentReport();});
+$('repWeekNext').addEventListener('click',function(){currentWeekOffset++;renderStudentReport();});
+
 function populateRepMonths(){
   $('repMonth').innerHTML='';$('repYear').innerHTML='';
   MO.forEach(function(m,i){var o=document.createElement('option');o.value=i;o.textContent=m;
@@ -792,51 +749,322 @@ function populateRepMonths(){
     if(y===cy)o.selected=true;$('repYear').appendChild(o)}
 }
 
-$('repStu').addEventListener('change',function(){
-  selectedStudentId=this.value;
-  if(selectedStudentId){
-    $('reportContent').classList.remove('hi');
-    calcStats();updateWeekRange();
-  }else{$('reportContent').classList.add('hi');}
-});
+function renderStudentReport(){
+  var sid=$('repStu').value;
+  if(!sid)return;
+  var stu=S.students.find(function(s){return s.id===sid});
+  if(!stu)return;
 
-function calcStats(){
-  var sid=selectedStudentId;if(!sid)return;
+  // Calculate overall stats
   var totalDays=0,presentDays=0;
   Object.keys(S.attendance).forEach(function(date){
-    if(S.attendance[date][sid]){totalDays++;if(S.attendance[date][sid]==='P')presentDays++;}});
+    if(S.attendance[date][sid]){
+      totalDays++;
+      if(S.attendance[date][sid]==='P')presentDays++;
+    }
+  });
   var attPct=totalDays?Math.round(presentDays/totalDays*100):0;
-  var tests=S.testMarks.filter(function(t){return t.studentId===sid});
-  var avgMarks=0;
-  if(tests.length){
-    var sum=0;tests.forEach(function(t){sum+=t.maxMarks?t.scored/t.maxMarks*100:0});
-    avgMarks=Math.round(sum/tests.length);
-  }
+  
   var totalClasses=S.history.length;
+
   $('repAttPct').textContent=attPct+'%';
-  $('repTests').textContent=tests.length;
-  $('repAvgMarks').textContent=avgMarks+'%';
   $('repClasses').textContent=totalClasses;
 }
 
-$('repWeekBtn').addEventListener('click',function(){
-  $('weekPicker').classList.remove('hi');$('monthPicker').classList.add('hi');
-  this.style.background='var(--pri)';this.style.color='#fff';
-  $('repMonthBtn').style.background='';$('repMonthBtn').style.color='';
-  updateWeekRange();
-});
-$('repMonthBtn').addEventListener('click',function(){
-  $('monthPicker').classList.remove('hi');$('weekPicker').classList.add('hi');
-  this.style.background='var(--pri)';this.style.color='#fff';
-  $('repWeekBtn').style.background='';$('repWeekBtn').style.color='';
+$('repGenBtn').addEventListener('click',function(){
+  var sid=$('repStu').value;
+  if(!sid){toast('⚠️ Select student!');return;}
+  var stu=S.students.find(function(s){return s.id===sid});
+  if(!stu)return;
+
+  var isWeek=$('repType').value==='week';
+  if(isWeek){generateWeeklyStudentPDF(stu);}
+  else{generateMonthlyStudentPDF(stu);}
 });
 
-function updateWeekRange(){
-  var today=new Date(),dow=today.getDay();
-  var mon=new Date(today);mon.setDate(today.getDate()-(dow===0?6:dow-1)+(currentWeekOffset*7));
+function generateWeeklyStudentPDF(stu){
+  var today=new Date();
+  var dayOfWeek=today.getDay();
+  var mon=new Date(today);
+  mon.setDate(today.getDate()-(dayOfWeek===0?6:dayOfWeek-1)+(currentWeekOffset*7));
   var sun=new Date(mon);sun.setDate(mon.getDate()+6);
-  $('weekRangeDisp').textContent=fmtDS(mon)+' to '+fmtDS(sun);
+
+  var html='<!DOCTYPE html><html><head><title>Weekly Report</title>'+rptCSS()+'</head><body>';
+  html+='<h1>📊 Weekly Student Report</h1>';
+  html+='<div class="m">Student: '+esc(stu.name)+'<br>Week: '+fmtDate(mon)+' to '+fmtDate(sun)+'</div>';
+
+  // Attendance
+  var presentCount=0,totalCount=0;
+  for(var i=0;i<7;i++){
+    var d=new Date(mon);d.setDate(mon.getDate()+i);
+    var dt=d.toISOString().split('T')[0];
+    if(S.attendance[dt]&&S.attendance[dt][stu.id]){
+      totalCount++;
+      if(S.attendance[dt][stu.id]==='P')presentCount++;
+    }
+  }
+  html+='<h2>Attendance</h2><table><tr><th>Present</th><th>Absent</th><th>Percentage</th></tr>';
+  html+='<tr><td class="p">'+presentCount+'</td><td class="a">'+(totalCount-presentCount)+'</td>';
+  html+='<td>'+(totalCount?Math.round(presentCount/totalCount*100):0)+'%</td></tr></table>';
+
+  // Classes
+  var weekClasses=S.history.filter(function(h){
+    if(!h.date)return false;
+    var hd=new Date(h.date+'T00:00:00');
+    return hd>=mon&&hd<=sun;
+  });
+
+  if(weekClasses.length){
+    html+='<h2>Classes Attended</h2>';
+    weekClasses.forEach(function(h){
+      html+='<div class="dc"><h3>'+h.subject+' - '+fmtDate(new Date(h.date+'T00:00:00'))+'</h3>';
+      if(h.topics){var b=bullets(h.topics);if(b.length){html+='<ul>';b.forEach(function(x){html+='<li>'+esc(x)+'</li>'});html+='</ul>';}}
+      html+='</div>';
+    });
+  }
+
+  html+='<div class="ft2">Tuition Manager Pro</div></body></html>';
+  openP(html);
 }
 
-$('repWeekPrev').addEventListener('click',function(){currentWeekOffset--;updateWeekRange();});
-$('repWeekCur').addEventListener('click',function(){
+function generateMonthlyStudentPDF(stu){
+  var m=+$('repMonth').value,y=+$('repYear').value;
+  var html='<!DOCTYPE html><html><head><title>Monthly Report</title>'+rptCSS()+'</head><body>';
+  html+='<h1>📊 Monthly Student Report</h1>';
+  html+='<div class="m">Student: '+esc(stu.name)+'<br>Month: '+MO[m]+' '+y+'</div>';
+
+  // Attendance
+  var days=dIM(m,y),pc=0,ac=0;
+  for(var d=1;d<=days;d++){
+    var dt=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    if(S.attendance[dt]&&S.attendance[dt][stu.id]){
+      if(S.attendance[dt][stu.id]==='P')pc++;
+      else if(S.attendance[dt][stu.id]==='A')ac++;
+    }
+  }
+  var tot=pc+ac,pct=tot?Math.round(pc/tot*100):0;
+  html+='<h2>Attendance Summary</h2><table><tr><th>Present</th><th>Absent</th><th>Total</th><th>%</th></tr>';
+  html+='<tr><td class="p">'+pc+'</td><td class="a">'+ac+'</td><td>'+tot+'</td><td>'+pct+'%</td></tr></table>';
+
+  // Classes
+  var monthClasses=S.history.filter(function(h){
+    if(!h.date)return false;
+    var hd=new Date(h.date+'T00:00:00');
+    return hd.getMonth()===m&&hd.getFullYear()===y;
+  });
+
+  if(monthClasses.length){
+    html+='<h2>Classes Summary ('+monthClasses.length+' total)</h2>';
+    var bySubj={};
+    monthClasses.forEach(function(h){
+      if(!bySubj[h.subject])bySubj[h.subject]=[];
+      bySubj[h.subject].push(h);
+    });
+    Object.keys(bySubj).forEach(function(subj){
+      html+='<h3>'+subj+' ('+bySubj[subj].length+' classes)</h3>';
+      bySubj[subj].forEach(function(h){
+        html+='<div class="dc"><strong>'+fmtDate(new Date(h.date+'T00:00:00'))+'</strong>';
+        if(h.topics){var b=bullets(h.topics);if(b.length){html+='<ul>';b.forEach(function(x){html+='<li>'+esc(x)+'</li>'});html+='</ul>';}}
+        html+='</div>';
+      });
+    });
+  }
+
+  html+='<div class="ft2">Tuition Manager Pro</div></body></html>';
+  openP(html);
+}
+
+// ═══ FEES ═══
+var pendingSS=null;
+function uDL(){$('sDL').innerHTML=S.students.map(function(s){
+  return'<option value="'+esc(s.name)+'">'}).join('')}
+
+$('fSS').addEventListener('change',function(){
+  if(this.files&&this.files[0]){var reader=new FileReader();reader.onload=function(e){
+    var img=new Image();img.onload=function(){var canvas=document.createElement('canvas'),
+      maxW=400,w=img.width,h=img.height;if(w>maxW){h=h*(maxW/w);w=maxW;}
+      canvas.width=w;canvas.height=h;canvas.getContext('2d').drawImage(img,0,0,w,h);
+      pendingSS=canvas.toDataURL('image/jpeg',0.5);
+      $('ssP').innerHTML='<img src="'+pendingSS+'" style="max-width:65px;border-radius:6px;border:1px solid var(--b)">';
+    };img.src=e.target.result;};reader.readAsDataURL(this.files[0]);}});
+
+$('afB').addEventListener('click',function(){var stu=$('fS').value.trim(),
+  amt=parseFloat($('fA').value),dt=$('fD').value;
+  if(!stu){toast('⚠️ Enter student!');$('fS').focus();return;}
+  if(!amt||amt<=0){toast('⚠️ Enter amount!');$('fA').focus();return;}
+  if(!dt){toast('⚠️ Select date!');$('fD').focus();return;}
+  S.fees.push({id:String(Date.now()),studentName:stu,amount:amt,date:dt,
+    forMonth:$('fM').value||'',note:$('fN').value.trim(),screenshot:pendingSS||''});
+  cloudSave();$('fS').value='';$('fA').value='';$('fN').value='';
+  $('fSS').value='';$('ssP').innerHTML='';pendingSS=null;
+  rFees();pFF();toast('✅ Saved!');});
+
+function rFees(){var filtered=S.fees.slice(),fm=$('ffM').value,
+  fs=$('ffS').value.trim().toLowerCase();
+  if(fm)filtered=filtered.filter(function(f){return f.forMonth===fm});
+  if(fs)filtered=filtered.filter(function(f){return f.studentName.toLowerCase().indexOf(fs)>=0});
+  filtered.sort(function(a,b){return parseInt(b.id)-parseInt(a.id)});
+  if(!filtered.length){$('fL').innerHTML='<div class="em">No payments.</div>';return;}
+  $('fL').innerHTML=filtered.map(function(f){var d=new Date(f.date+'T00:00:00'),
+    ml=f.forMonth?fmtML(f.forMonth):'';
+    return'<div class="fi2"><div class="ft"><div style="flex:1">'+
+    '<div style="font-weight:700;font-size:.84rem">'+esc(f.studentName)+'</div>'+
+    '<div class="fa">₹'+f.amount.toLocaleString()+'</div>'+
+    '<div style="font-size:.7rem;color:var(--t2)">'+fmtDS(d)+(ml?' • '+ml:'')+(f.note?' • '+esc(f.note):'')+'</div></div>'+
+    (f.screenshot?'<img src="'+f.screenshot+'" class="fm" onclick="APP.vSS(\''+f.id+'\')">':'')+
+    '</div><div style="text-align:right;margin-top:.18rem">'+
+    '<button class="btn bsm bd" onclick="APP.dF(\''+f.id+'\')">🗑️</button></div></div>';
+  }).join('');}
+
+function pFF(){var months=new Set();S.fees.forEach(function(f){if(f.forMonth)months.add(f.forMonth)});
+  var cur=$('ffM').value;$('ffM').innerHTML='<option value="">All Months</option>';
+  Array.from(months).sort().reverse().forEach(function(m){
+    var o=document.createElement('option');o.value=m;o.textContent=fmtML(m);$('ffM').appendChild(o)});
+  $('ffM').value=cur;}
+
+APP.vSS=function(id){var f=S.fees.find(function(x){return String(x.id)===String(id)});
+  if(!f||!f.screenshot)return;var v=document.createElement('div');v.className='sv';
+  v.innerHTML='<img src="'+f.screenshot+'">';v.onclick=function(){v.remove()};
+  document.body.appendChild(v)};
+APP.dF=function(id){if(!confirm('Delete?'))return;
+  S.fees=S.fees.filter(function(x){return String(x.id)!==String(id)});
+  cloudSave();rFees();toast('🗑️ Deleted')};
+$('ffM').addEventListener('change',rFees);
+$('ffS').addEventListener('input',rFees);
+
+// ═══ CLASS REPORTS ═══
+var curRpt='';
+function pRptSel(){$('rM').innerHTML='';$('rY').innerHTML='';
+  MO.forEach(function(m,i){var o=document.createElement('option');o.value=i;o.textContent=m;
+    if(i===new Date().getMonth())o.selected=true;$('rM').appendChild(o)});
+  var cy=new Date().getFullYear();
+  for(var y=cy-1;y<=cy+1;y++){var o=document.createElement('option');o.value=y;o.textContent=y;
+    if(y===cy)o.selected=true;$('rY').appendChild(o)}}
+
+document.querySelectorAll('.rc').forEach(function(c){c.addEventListener('click',function(){
+  curRpt=c.dataset.r;$('rT').textContent='📄 '+c.querySelector('h4').textContent;
+  $('rO').classList.remove('hi');$('rO').scrollIntoView({behavior:'smooth'})})});
+$('rC').addEventListener('click',function(){$('rO').classList.add('hi')});
+$('rG').addEventListener('click',function(){var m=+$('rM').value,y=+$('rY').value;
+  if(curRpt==='week')rptW();else if(curRpt==='month')rptM(m,y);
+  else if(curRpt==='att')rptA(m,y);else if(curRpt==='fee')rptF(m,y);});
+
+function openP(html){var w=window.open('','_blank');if(!w){toast('⚠️ Allow popups!');return;}
+  w.document.write(html);w.document.close();setTimeout(function(){w.print()},500)}
+
+function rptCSS(){return'<style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:Arial,sans-serif;padding:18px;color:#111;font-size:12px}h1{font-size:17px;margin-bottom:3px;color:#075E54}h2{font-size:13px;margin:10px 0 5px;color:#333;border-bottom:2px solid #075E54;padding-bottom:2px}h3{font-size:11px;margin:8px 0 3px;color:#555}.m{font-size:10px;color:#666;margin-bottom:14px}table{width:100%;border-collapse:collapse;margin:6px 0;font-size:10px}th,td{border:1px solid #ccc;padding:3px 5px;text-align:center}th{background:#075E54;color:#fff}.p{background:#e8f5e9;color:#2e7d32;font-weight:700}.a{background:#ffebee;color:#c62828;font-weight:700}.h{background:#fff3e0;color:#f57c00;font-weight:700}.dc{margin:8px 0;padding:8px;border:1px solid #ddd;border-radius:6px}.dc ul{margin:3px 0 3px 16px}.ft2{margin-top:18px;font-size:9px;color:#999;text-align:center;border-top:1px solid #eee;padding-top:6px}.tr2{font-weight:700;background:#f5f5f5}.amt{text-align:right;font-weight:700}@media print{body{padding:8px}}</style>'}
+
+function rptW(){var today=new Date(),dow=today.getDay(),mon=new Date(today);
+  mon.setDate(today.getDate()-(dow===0?6:dow-1));var sun=new Date(mon);sun.setDate(mon.getDate()+6);
+  var h='<!DOCTYPE html><html><head><title>Weekly</title>'+rptCSS()+'</head><body><h1>📚 Weekly Report</h1><div class="m">'+fmtDate(mon)+' — '+fmtDate(sun)+'</div>';
+  var found=false;for(var i=0;i<7;i++){var d=new Date(mon);d.setDate(mon.getDate()+i);
+    var dt=d.toISOString().split('T')[0];
+    var entries=S.history.filter(function(e){return(e.date||'')==dt});
+    if(entries.length){found=true;entries.forEach(function(e){
+      h+='<div class="dc"><h3>'+DY[d.getDay()]+', '+fmtDate(d)+'</h3>';
+      if(e.subject)h+='<div><b>Subject:</b> '+esc(e.subject)+'</div>';
+      if(e.topics){var b=bullets(e.topics);if(b.length){h+='<ul>';
+        b.forEach(function(x){h+='<li>'+esc(x)+'</li>'});h+='</ul>';}}
+      if(e.startTime&&e.endTime)h+='<div><b>Time:</b> '+fmtT(e.startTime)+' - '+fmtT(e.endTime)+'</div>';
+      if(e.homework)h+='<div><b>HW:</b> '+esc(e.homework)+'</div>';h+='</div>';})}}
+  if(!found)h+='<div style="padding:16px;text-align:center;color:#999">No classes.</div>';
+  h+='<div class="ft2">Tuition Manager Pro</div></body></html>';openP(h);}
+
+function rptM(m,y){var days=dIM(m,y),h='<!DOCTYPE html><html><head><title>Monthly</title>'+rptCSS()+'</head><body><h1>📚 Monthly Report</h1><div class="m">'+MO[m]+' '+y+'</div>';
+  var found=false;for(var d=1;d<=days;d++){
+    var dt=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+    var entries=S.history.filter(function(e){return(e.date||'')==dt});
+    if(entries.length){found=true;var date=new Date(y,m,d);entries.forEach(function(e){
+      h+='<div class="dc"><h3>'+d+' '+MO[m]+' ('+DY[date.getDay()]+')</h3>';
+      if(e.subject)h+='<div><b>Subject:</b> '+esc(e.subject)+'</div>';
+      if(e.topics){var b=bullets(e.topics);if(b.length){h+='<ul>';
+        b.forEach(function(x){h+='<li>'+esc(x)+'</li>'});h+='</ul>';}}
+      if(e.startTime&&e.endTime)h+='<div><b>Time:</b> '+fmtT(e.startTime)+' - '+fmtT(e.endTime)+'</div>';
+      if(e.homework)h+='<div><b>HW:</b> '+esc(e.homework)+'</div>';h+='</div>';})}}
+  if(!found)h+='<div style="padding:16px;text-align:center;color:#999">No classes.</div>';
+  h+='<div class="ft2">Tuition Manager Pro</div></body></html>';openP(h);}
+
+function rptA(m,y){var days=dIM(m,y),h='<!DOCTYPE html><html><head><title>Attendance</title>'+rptCSS()+'<style>td,th{font-size:9px;padding:2px}</style></head><body><h1>✅ Attendance</h1><div class="m">'+MO[m]+' '+y+'</div>';
+  if(!S.students.length){h+='<div style="padding:16px;text-align:center;color:#999">No students.</div>';}
+  else{h+='<table><tr><th style="text-align:left">Name</th>';
+    for(var d=1;d<=days;d++){var dd=new Date(y,m,d);var isSun=dd.getDay()===0;
+      h+='<th'+(isSun?' style="background:#ef5350"':'')+'>'+d+'</th>';}
+    h+='<th>P</th><th>A</th><th>H</th><th>%</th></tr>';
+    S.students.forEach(function(s){var sid=String(s.id);
+      h+='<tr><td style="text-align:left;font-weight:600">'+esc(s.name)+'</td>';
+      var pc=0,ac=0,hc=0;for(var d=1;d<=days;d++){
+        var dt=y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
+        var isHol=S.holidays&&S.holidays[dt]===true;
+        if(isHol){hc++;h+='<td class="h">H</td>';}
+        else{var rec=S.attendance[dt],st=rec?rec[sid]:'';
+          if(st==='P'){pc++;h+='<td class="p">P</td>';}
+          else if(st==='A'){ac++;h+='<td class="a">A</td>';}
+          else h+='<td>-</td>';}}
+      var tot=pc+ac,pct=tot?Math.round(pc/tot*100):0;
+      h+='<td class="p">'+pc+'</td><td class="a">'+ac+'</td><td class="h">'+hc+'</td><td>'+pct+'%</td></tr>';});
+    h+='</table>';}h+='<div class="ft2">Tuition Manager Pro</div></body></html>';openP(h);}
+
+function rptF(m,y){var ms=y+'-'+String(m+1).padStart(2,'0');
+  var filtered=S.fees.filter(function(f){return f.forMonth===ms||(f.date&&f.date.startsWith(ms))});
+  var h='<!DOCTYPE html><html><head><title>Fees</title>'+rptCSS()+'</head><body><h1>💰 Fees</h1><div class="m">'+MO[m]+' '+y+'</div>';
+  if(!filtered.length)h+='<div style="padding:16px;text-align:center;color:#999">No fees.</div>';
+  else{h+='<table><tr><th style="text-align:left">Student</th><th>Amount</th><th>Date</th><th>Note</th></tr>';
+    var total=0;filtered.sort(function(a,b){return(a.date||'').localeCompare(b.date||'')}).forEach(function(f){
+      total+=f.amount;var d=new Date(f.date+'T00:00:00');
+      h+='<tr><td style="text-align:left">'+esc(f.studentName)+'</td><td class="amt">₹'+f.amount.toLocaleString()+'</td><td>'+fmtDS(d)+'</td><td>'+esc(f.note||'-')+'</td></tr>';});
+    h+='<tr class="tr2"><td style="text-align:left">TOTAL</td><td class="amt">₹'+total.toLocaleString()+'</td><td colspan="2">'+filtered.length+' payments</td></tr></table>';}
+  h+='<div class="ft2">Tuition Manager Pro</div></body></html>';openP(h);}
+
+// ═══ SYNC ═══
+function rSync(){$('syncStat').innerHTML='<b>☁️ Connected</b><br>Saves: '+saveCount+' this session';
+  $('stats').innerHTML='👨‍🎓 Students: <b>'+S.students.length+'</b><br>'+
+    '📝 Classes: <b>'+S.history.length+'</b><br>'+
+    '✅ Att Days: <b>'+Object.keys(S.attendance).length+'</b><br>'+
+    '🏖️ Holidays: <b>'+Object.keys(S.holidays||{}).length+'</b><br>'+
+    '💰 Payments: <b>'+S.fees.length+'</b>';}
+
+$('forceUp').addEventListener('click',function(){if(!isLoaded){toast('⚠️ Load first!');return;}
+  doCloudSave();toast('☁️ Uploading…');});
+$('forceDn').addEventListener('click',function(){$('loadOvr').classList.remove('hide');
+  isLoaded=false;loadFromCloud(function(ok){if(ok){isLoaded=true;
+    $('loadOvr').classList.add('hide');renderAll();toast('✅ Reloaded!');}});});
+$('clrAll').addEventListener('click',function(){
+  if(!confirm('⚠️ DELETE ALL?\n\nCANNOT be undone!'))return;
+  if(!confirm('Really sure?'))return;
+  S={subjects:[].concat(DEF_SUBJ),selSubjects:[],templates:[],history:[],
+    lastTimes:{start:'16:00',end:'17:00'},students:[],attendance:{},holidays:{},
+    testMarks:[],homeworkCompletion:[],syllabusProgress:[],fees:[]};
+  var data=JSON.parse(JSON.stringify(S));data._forceClear=true;
+  fetch(SHEET_URL,{method:'POST',mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(data)})
+    .then(function(){renderAll();toast('🗑️ Cleared')})
+    .catch(function(){toast('❌ Error')});});
+
+// ═══ RENDER ALL ═══
+function renderAll(){rSubj();rTpl();rHist();rStu();rAtt();rAttSum();updateRepStu();rFees();pFF();rSync();uDL();}
+
+// ═══ INIT ═══
+function init(){$('hdrDate').textContent=fmtDate(new Date());$('aD').value=todayISO();
+  $('fD').value=todayISO();var now=new Date();
+  $('fM').value=now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  pAttSel();pRptSel();populateRepMonths();
+  ['tI','hI','pT','hR'].forEach(function(id){
+    $(id).addEventListener('input',function(){this.style.height='auto';
+      this.style.height=this.scrollHeight+'px'})});
+  $('retryBtn').addEventListener('click',function(){$('retryBox').classList.add('hi');startLoad();});
+  startLoad();}
+
+function startLoad(){$('loadMsg').textContent='Connecting to cloud…';$('retryBox').classList.add('hi');
+  $('loadOvr').classList.remove('hide');$('saveTxt').textContent='Connecting…';
+  loadFromCloud(function(success){if(success){isLoaded=true;$('loadOvr').classList.add('hide');
+    $('t1').value=S.lastTimes.start||'16:00';$('t2').value=S.lastTimes.end||'17:00';
+    renderAll();$('saveTxt').textContent='☁️ Connected';
+    setTimeout(function(){$('tI').focus()},300);}});}
+
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
+else init();
+
+})();
+</script>
+</body>
+</html>
